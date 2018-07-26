@@ -6,22 +6,37 @@
 </head>
 <body>
     <div>
-        <h3 id="clickMe">Click Me!</h3>
-        <p id="my-cat">
+        <h3>Steven</h3>
+        <p>Clicks: <a id="count_1">0</a></p>
+        <p id="cat-1">
             <img src="img/cat_pic.jpg"
             alt="i haz counter">
         </p>
+        <h3>Stephen</h3>
+        <p>Clicks: <a id="count_2">0</a></p>
+        <p id="cat-2">
+            <img src="img/cat2.jpg"
+                 alt="i haz counter">
+        </p>
         <script>
-            var counter = 0;
+            var count_1 = 0;
+            var count_2 = 0;
 
-            var elem = document.getElementById('my-cat');
-            elem.addEventListener('click', function(){
+            var elem1 = document.getElementById('cat-1');
+            elem1.addEventListener('click', function(){
                 //the element has been clicked... do stuff here
-                counter += 1;
-                document.getElementById('counter').innerHTML = counter;
+                count_1 += 1;
+                document.getElementById('count_1').innerHTML = count_1;
+            }, false);
+
+            var elem2 = document.getElementById('cat-2');
+            elem2.addEventListener('click', function(){
+                //the element has been clicked... do stuff here
+                count_2 += 1;
+                document.getElementById('count_2').innerHTML = count_2;
             }, false);
         </script>
-        <p>Clicks: <a id="counter">0</a></p>
+
     </div>
 </body>
 
