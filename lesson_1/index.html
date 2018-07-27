@@ -5,36 +5,11 @@
     <title>Cat Clicker *Premium*</title>
 </head>
 <body>
-
-    <!--<h3>Steven</h3>-->
-    <!--<p>Clicks: <a id="count_1">0</a></p>-->
-    <!--<p id="cat-1">-->
-        <!--<img src="img/steve.jpg"-->
-        <!--alt="i haz counter">-->
-    <!--</p>-->
-    <!--<h3>Stephen</h3>-->
-    <!--<p>Clicks: <a id="count_2">0</a></p>-->
-    <!--<p id="cat-2">-->
-        <!--<img src="img/steph.jpg"-->
-             <!--alt="i haz counter">-->
-    <!--</p>-->
     <script>
-        // var count_1 = 0;
-        // var count_2 = 0;
-        //
-        // var elem1 = document.getElementById('cat-1');
-        // elem1.addEventListener('click', function(){
-        //     //the element has been clicked... do stuff here
-        //     count_1 += 1;
-        //     document.getElementById('count_1').innerHTML = count_1;
-        // }, false);
-        //
-        // var elem2 = document.getElementById('cat-2');
-        // elem2.addEventListener('click', function(){
-        //     //the element has been clicked... do stuff here
-        //     count_2 += 1;
-        //     document.getElementById('count_2').innerHTML = count_2;
-        // }, false);
+        var header = document.createElement('H1');
+        header.textContent = 'click my name, i haz pic :)';
+        document.body.appendChild(header);
+
         var list = document.createElement('UL');
         list.setAttribute('id', 'cat-list');
         document.body.appendChild(list);
@@ -43,32 +18,63 @@
 
         var idx;
         for (idx in cats) {
+            // create cat list
+            var cat_name = document.createTextNode(cats[idx]);
             var node = document.createElement('LI');
-            var textnode = document.createTextNode(cats[idx]);
-            node.appendChild(textnode);
+            node.appendChild(cat_name);
+            node.setAttribute('id', cats[idx]);
+            node.setAttribute('onclick', 'toggleKitty(this.id)');
             list.appendChild(node);
 
+            // create div for each kitty
             var div = document.createElement('DIV');
-            div.setAttribute('id', cats[idx]);
-
+            div.setAttribute('id', cats[idx] + '-div');
+            div.style.display = 'none';
+            // create header w/ cat name
             var header = document.createElement('H3');
-            header.appendChild(textnode);
-            var counter = document.createElement('P');
-            var count_text = document.createTextNode('Clicks: <a id="cat-' + idx + '">0</a>');
+            var name_text = document.createTextNode(cats[idx]);
+            header.appendChild(name_text);
+            // create click counter
+            var clicks = document.createElement('P');
+            var click_text = document.createTextNode('Clicks: ');
+            clicks.appendChild(click_text);
+            var counter = document.createElement('A');
+            counter.setAttribute('id', 'count-' + idx);
+            var count_text = document.createTextNode('0');
             counter.appendChild(count_text);
+            clicks.appendChild(counter);
+            // add pretty pic by name
+            var pic = document.createElement('IMG');
+            pic.setAttribute('src', 'img/' + cats[idx] + '.jpg');
+            pic.setAttribute('id', 'cat-' + idx);
 
+            // add event listener to pic
+            var count = 0;
+
+            pic.addEventListener('click', (function(numCopy, idxCopy) {
+                return function() {
+                    numCopy += 1;
+                    document.getElementById('count-' + idxCopy).innerHTML = numCopy;
+                };
+            })(count, idx));
+
+            // add all our elements to the html
             div.appendChild(header);
-            div.appendChild(counter);
-            // div.appendChild(pic);
+            div.appendChild(clicks);
+            div.appendChild(pic);
 
             document.body.appendChild(div);
+        }
 
-        };
-
-
+        function toggleKitty(name) {
+            console.log(name);
+            var x = document.getElementById(name + '-div');
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
     </script>
-
-
 </body>
-
 </html>
