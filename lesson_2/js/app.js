@@ -36,7 +36,7 @@ var model = {
 
 var octopus = {
     init: function() {
-        // set current cat to initialize
+        // set current cat to first in the model to start
         model.currentCat = model.cats[0];
 
         // tell views to initialize
@@ -44,20 +44,22 @@ var octopus = {
         catView.init();
     },
 
+    // function for catView to access current cat in the model
     getCurrentCat: function() {
         return model.currentCat;
     },
 
+    // function for catListView to access list of cats
     getCats: function() {
         return model.cats;
     },
 
-    //set the currently-selected cat to the object
+    // set the currently-selected cat to the object
     setCurrentCat: function(cat) {
         model.currentCat = cat;
     },
 
-    // increments counter
+    // increments counter for current cat
     incrementCounter: function () {
         model.currentCat.clickCount++;
         catView.render();
@@ -74,7 +76,9 @@ var catView = {
         this.countElem = document.getElementById('cat-count');
 
         // on click, increment the current cat's counter
-        this.catImageElem.addEventListener('click', function(e){
+        this.catImageElem.addEventListener('click', function(){
+            // call to octopus which increments counter and calls
+            // back to catView.render() w/ updated count
             octopus.incrementCounter();
         });
         // render this view (update DOM elements with the right values)
@@ -82,9 +86,9 @@ var catView = {
     },
 
     render: function() {
-        // updtae the DOM elements with values from the current cat
+        // update the DOM elements with values from the current cat
         var currentCat = octopus.getCurrentCat();
-        this.countElem.textContent = currentCat.clickCount;
+        this.countElem.textContent = currentCat.clickCount.toString();
         this.catNameElem.textContent = currentCat.name;
         this.catImageElem.src = currentCat.imgSrc;
     }
@@ -124,7 +128,7 @@ var catListView = {
                     octopus.setCurrentCat(cat);
                     catView.render();
                 };
-            })(cat));
+            })(cat)); // if we didn't have the outer function we'd always show ed
 
             // finally, add the element to the list
             this.catListElem.appendChild(elem);
