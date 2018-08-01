@@ -42,6 +42,7 @@ var octopus = {
         // tell views to initialize
         catListView.init();
         catView.init();
+        adminView.init();
     },
 
     // function for catView to access current cat in the model
@@ -63,6 +64,19 @@ var octopus = {
     incrementCounter: function () {
         model.currentCat.clickCount++;
         catView.render();
+    },
+
+    openAdmin: function() {
+        console.log('open admin panel.');
+    },
+
+    closeAdmin: function() {
+        console.log('close admin panel.');
+    },
+
+    updateCatModel: function() {
+        console.log('update model. render view.');
+        catView.render()
     }
 };
 
@@ -134,6 +148,32 @@ var catListView = {
             this.catListElem.appendChild(elem);
         };
     }
+};
+
+var adminView = {
+    init: function() {
+        // store pointers to our DOM elements for easy access later
+        this.buttonElem = document.getElementById('admin-button');
+        this.formElem = document.getElementById('admin-form');
+        this.formElem.setAttribute('onsubmit', 'octopus.updateCatModel()');
+        this.cancelElem = document.getElementById('admin-cancel');
+
+        // on click, show admin div
+        this.buttonElem.addEventListener('click', function(){
+            octopus.openAdmin();
+        });
+        // on click, hide admin div
+        this.cancelElem.addEventListener('click', function(){
+            octopus.closeAdmin();
+        });
+        // render this view (update DOM elements with the right values)
+        this.render();
+    },
+
+    render: function() {
+
+    }
+
 };
 
 // let 'er eat
