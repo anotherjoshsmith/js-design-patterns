@@ -64,14 +64,17 @@ var octopus = {
     incrementCounter: function () {
         model.currentCat.clickCount++;
         catView.render();
+        adminView.render();
     },
 
     openAdmin: function() {
-        console.log('open admin panel.');
+        var adminPanel = document.getElementById('admin');
+        adminPanel.style.display = 'block';
     },
 
     closeAdmin: function() {
-        console.log('close admin panel.');
+        var adminPanel = document.getElementById('admin');
+        adminPanel.style.display = 'none';
     },
 
     updateCatModel: function() {
@@ -141,6 +144,7 @@ var catListView = {
                 return function() {
                     octopus.setCurrentCat(cat);
                     catView.render();
+                    adminView.render();
                 };
             })(cat)); // if we didn't have the outer function we'd always show ed
 
@@ -156,7 +160,12 @@ var adminView = {
         this.buttonElem = document.getElementById('admin-button');
         this.formElem = document.getElementById('admin-form');
         this.formElem.setAttribute('onsubmit', 'octopus.updateCatModel()');
+        this.nameElem = document.getElementById('admin-name');
+        this.urlElem = document.getElementById('admin-url');
+        this.clicksElem = document.getElementById('admin-clicks');
         this.cancelElem = document.getElementById('admin-cancel');
+        this.saveElem = document.getElementById('admin-save');
+
 
         // on click, show admin div
         this.buttonElem.addEventListener('click', function(){
@@ -166,12 +175,21 @@ var adminView = {
         this.cancelElem.addEventListener('click', function(){
             octopus.closeAdmin();
         });
+        // on click, ask octopus to update model and render cat view
+        this.saveElem.addEventListener('click', function(){
+            octopus.updateCatModel();
+        });
         // render this view (update DOM elements with the right values)
         this.render();
+        octopus.closeAdmin();
     },
 
     render: function() {
-
+        // update the DOM elements with values from the current cat
+        var currentCat = octopus.getCurrentCat();
+        this.nameElem.value = currentCat.name;
+        this.urlElem.value = currentCat.imgSrc;
+        this.clicksElem.value = currentCat.clickCount;
     }
 
 };
