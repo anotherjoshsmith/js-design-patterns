@@ -78,8 +78,11 @@ var octopus = {
     },
 
     updateCatModel: function() {
-        console.log('update model. render view.');
-        catView.render()
+        model.currentCat.name = adminView.nameElem.value;
+        model.currentCat.imgSrc = adminView.urlElem.value;
+        model.currentCat.clickCount = adminView.clicksElem.value;
+        catView.render();
+        catListView.render();
     }
 };
 
@@ -158,8 +161,6 @@ var adminView = {
     init: function() {
         // store pointers to our DOM elements for easy access later
         this.buttonElem = document.getElementById('admin-button');
-        this.formElem = document.getElementById('admin-form');
-        this.formElem.setAttribute('onsubmit', 'octopus.updateCatModel()');
         this.nameElem = document.getElementById('admin-name');
         this.urlElem = document.getElementById('admin-url');
         this.clicksElem = document.getElementById('admin-clicks');
