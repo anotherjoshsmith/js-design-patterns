@@ -42,6 +42,7 @@ var octopus = {
         // tell views to initialize
         catListView.init();
         catView.init();
+        adminView.init();
     },
 
     // function for catView to access current cat in the model
@@ -63,6 +64,25 @@ var octopus = {
     incrementCounter: function () {
         model.currentCat.clickCount++;
         catView.render();
+        adminView.render();
+    },
+
+    openAdmin: function() {
+        var adminPanel = document.getElementById('admin');
+        adminPanel.style.display = 'block';
+    },
+
+    closeAdmin: function() {
+        var adminPanel = document.getElementById('admin');
+        adminPanel.style.display = 'none';
+    },
+
+    updateCatModel: function() {
+        model.currentCat.name = adminView.nameElem.value;
+        model.currentCat.imgSrc = adminView.urlElem.value;
+        model.currentCat.clickCount = adminView.clicksElem.value;
+        catView.render();
+        catListView.render();
     }
 };
 
@@ -127,6 +147,7 @@ var catListView = {
                 return function() {
                     octopus.setCurrentCat(cat);
                     catView.render();
+                    adminView.render();
                 };
             })(cat)); // if we didn't have the outer function we'd always show ed
 
@@ -134,6 +155,44 @@ var catListView = {
             this.catListElem.appendChild(elem);
         };
     }
+};
+
+var adminView = {
+    init: function() {
+        // store pointers to our DOM elements for easy access later
+        this.buttonElem = document.getElementById('admin-button');
+        this.nameElem = document.getElementById('admin-name');
+        this.urlElem = document.getElementById('admin-url');
+        this.clicksElem = document.getElementById('admin-clicks');
+        this.cancelElem = document.getElementById('admin-cancel');
+        this.saveElem = document.getElementById('admin-save');
+
+
+        // on click, show admin div
+        this.buttonElem.addEventListener('click', function(){
+            octopus.openAdmin();
+        });
+        // on click, hide admin div
+        this.cancelElem.addEventListener('click', function(){
+            octopus.closeAdmin();
+        });
+        // on click, ask octopus to update model and render cat view
+        this.saveElem.addEventListener('click', function(){
+            octopus.updateCatModel();
+        });
+        // render this view (update DOM elements with the right values)
+        this.render();
+        octopus.closeAdmin();
+    },
+
+    render: function() {
+        // update the DOM elements with values from the current cat
+        var currentCat = octopus.getCurrentCat();
+        this.nameElem.value = currentCat.name;
+        this.urlElem.value = currentCat.imgSrc;
+        this.clicksElem.value = currentCat.clickCount;
+    }
+
 };
 
 // let 'er eat
