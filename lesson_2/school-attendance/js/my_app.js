@@ -45,7 +45,9 @@ var tableView = {
     render: function () {
         console.log('construct tableView.');
         var days = octopus.getNumberOfDays();
+        var students = octopus.getStudents();
 
+        // construct header
         var header = document.createElement('TR');
         var nameCol = document.createElement('TH');
         nameCol.setAttribute('class', 'name-col');
@@ -64,6 +66,34 @@ var tableView = {
         header.appendChild(missedCol);
 
         this.headerElem.appendChild(header);
+
+        // build table
+        for (var i = 0; i < students.length; i++) {
+            // this is the student we're currently looping over
+            var student = students[i];
+            // construct body elem
+            var row = document.createElement('TR');
+            var nameCol = document.createElement('TD');
+            nameCol.setAttribute('class', 'name-col');
+            nameCol.textContent = student.name;
+            row.appendChild(nameCol);
+
+            for (var j = 1; j <= days; j++) {
+                var dayCol = document.createElement('TD');
+                var box = document.createElement('INPUT');
+                box.setAttribute('type', 'checkbox');
+                box.checked = student.attendance[j - 1];
+                dayCol.appendChild(box);
+                row.appendChild(dayCol);
+            }
+
+            var missedCol = document.createElement('TD');
+            missedCol.setAttribute('class', 'missed-col');
+            missedCol.textContent = student.daysMissed.toString();
+            row.appendChild(missedCol);
+
+            this.bodyElem.appendChild(row);
+        }
     }
 };
 
@@ -71,17 +101,36 @@ var tableView = {
 var octopus = {
     init: function () {
         console.log('initializing...');
+        for (var i = 0; i < model.students.length; i++) {
+            // this is the student we're currently looping over
+            var student = model.students[i];
+            student.attendance = this.generateRecord();
+        }
+        this.countMissing();
         // initialize tableView
         tableView.init();
+    },
 
-        // generate random attendance record and re-render
-        // if record not found in localStorage
-        //this.generateRecord();
-        //tableView.render();
+    getStudents: function () {
+        return model.students;
+    },
+
+    getRecord: function(name) {
+
     },
 
     generateRecord: function () {
-        console.log('generate record data if not in localStorage.');
+        console.log('Creating attendance record...');
+        var attendanceArray = [];
+
+        function getRandom() {
+            return (Math.random() >= 0.5);
+        }
+
+        for (var idx = 0; idx < model.days; idx++) {
+            attendanceArray.push(getRandom());
+        }
+        return attendanceArray
     },
 
     getNumberOfDays: function () {
@@ -90,6 +139,17 @@ var octopus = {
 
     countMissing: function () {
         console.log('count absences, update model, render view.');
+        for (var i = 0; i < model.students.length; i++) {
+            var student = model.students[i];
+
+            var sum = 0;
+            for (var j = 0; j < student.attendance.length; j++) {
+                if (student.attendance[j] == 0) {
+                    sum++
+                }
+            }
+            student.daysMissed = sum;
+        }
     }
 };
 
