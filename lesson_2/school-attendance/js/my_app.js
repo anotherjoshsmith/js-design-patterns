@@ -4,27 +4,27 @@ var model = {
     students: [
         {
             name: 'Slappy the Frog',
-            attendance: [],
+            attendance: null,
             daysMissed: 0
         },
         {
             name: 'Lilly the Lizard',
-            attendance: [],
+            attendance: null,
             daysMissed: 0
         },
         {
             name: 'Paulrus the Walrus',
-            attendance: [],
+            attendance: null,
             daysMissed: 0
         },
         {
             name: 'Gregory the Goat',
-            attendance: [],
+            attendance: null,
             daysMissed: 0
         },
         {
             name: 'Adam the Anaconda',
-            attendance: [],
+            attendance: null,
             daysMissed: 0
         }
     ]
@@ -83,6 +83,7 @@ var tableView = {
                 var box = document.createElement('INPUT');
                 box.setAttribute('type', 'checkbox');
                 box.checked = student.attendance[j - 1];
+                box.setAttribute('onclick', 'octopus.updateRecord(this)');
                 dayCol.appendChild(box);
                 row.appendChild(dayCol);
             }
@@ -104,8 +105,10 @@ var octopus = {
         for (var i = 0; i < model.students.length; i++) {
             // this is the student we're currently looping over
             var student = model.students[i];
-            student.attendance = this.generateRecord();
+            student.attendance = this.getRecord(student.name);
         }
+        // save to localStorage for persistence
+        localStorage.attendance = JSON.stringify(model);
         this.countMissing();
         // initialize tableView
         tableView.init();
@@ -116,7 +119,16 @@ var octopus = {
     },
 
     getRecord: function(name) {
+        if (!localStorage.attendance) {
+            return this.generateRecord();
+        }
 
+        var student_idx = JSON.parse(localStorage.attendance).students
+            .findIndex(function (student) {
+                return student.name == name;
+        });
+
+        return JSON.parse(localStorage.attendance).students[student_idx].attendance
     },
 
     generateRecord: function () {
@@ -150,6 +162,12 @@ var octopus = {
             }
             student.daysMissed = sum;
         }
+    },
+
+    updateRecord: function (thing) {
+        console.log(thing);
+        this.countMissing();
+        // tableView.render();
     }
 };
 
