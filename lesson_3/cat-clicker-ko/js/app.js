@@ -18,6 +18,8 @@ var ViewModel = function() {
 
     }, this);
 
+    this.nicknames = ko.observableArray(['Tabitha', 'Gone off a Tabby', 'Taberculosis']);
+
 };
 
 ko.applyBindings(new ViewModel());
