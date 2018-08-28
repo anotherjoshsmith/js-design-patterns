@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+         * element that contains the map. */
+        #map {
+            height: 100%;
+        }
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script src="../app-env.js"></script>
+<script src="js/app.js"></script>
+<script type="text/javascript" async defer>
+    var mapsScript = document.createElement('script');
+    mapsScript.src = api_url;
+    document.getElementsByTagName('head')[0].appendChild(mapsScript);
+</script>
+</body>
+</html>
